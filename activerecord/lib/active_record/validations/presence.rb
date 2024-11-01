@@ -1,8 +1,16 @@
 # frozen_string_literal: true
+require 'pp'
+require_relative 'constraints'
 
 module ActiveRecord
   module Validations
     class PresenceValidator < ActiveModel::Validations::PresenceValidator # :nodoc:
+      def initialize(options)
+        c = NonNullConstraint.new(options[:class].to_s, options[:attributes][0].to_s, true)
+        # puts c
+        super
+      end
+
       def validate_each(record, attribute, association_or_value)
         if record.class._reflect_on_association(attribute)
           association_or_value = Array.wrap(association_or_value).reject(&:marked_for_destruction?)

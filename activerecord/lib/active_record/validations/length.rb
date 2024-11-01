@@ -1,8 +1,27 @@
 # frozen_string_literal: true
+require 'pp'
 
 module ActiveRecord
   module Validations
     class LengthValidator < ActiveModel::Validations::LengthValidator # :nodoc:
+      def initialize(options)
+        #pp options
+        max = nil
+        min = nil
+        if options[:within]
+          max = options[:within].end
+          min = options[:within].begin
+        else
+          max = options[:maximum]
+          min = options[:minimum]
+        end
+
+        c = LengthConstraint.new(options[:class].to_s, options[:attributes][0].to_s, min, max)
+        # puts c
+
+        super
+      end
+
       def validate_each(record, attribute, association_or_value)
         if association_or_value.respond_to?(:loaded?) && association_or_value.loaded?
           association_or_value = association_or_value.target.reject(&:marked_for_destruction?)

@@ -1,8 +1,23 @@
-# frozen_string_literal: true
+#frozen_string_literal: true
+require 'pp'
+require_relative 'constraints'
 
 module ActiveRecord
   module Validations
     class AssociatedValidator < ActiveModel::EachValidator #:nodoc:
+      def initialize(options)
+        # Table => klass
+        # Column => klass.primary_key
+        # Fk_Table => 
+        # Fk_Column =>
+        klass = options[:class] # table is class, column is primary key
+        fk = options[:attributes] # table is attribute, need primary key of this attribute
+        pp klass
+        # see if fk is an argument in klass.new, if so, get that class and its foreign key
+        # pp klass.instance_method(:initialize).parameters
+        super
+      end
+
       def validate_each(record, attribute, value)
         if Array(value).reject { |r| valid_object?(r) }.any?
           record.errors.add(attribute, :invalid, options.merge(value: value))

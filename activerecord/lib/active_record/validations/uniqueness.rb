@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require_relative 'constraints'
 
 module ActiveRecord
   module Validations
@@ -14,6 +15,20 @@ module ActiveRecord
         end
         super({ case_sensitive: true }.merge!(options))
         @klass = options[:class]
+
+        cs = options[:case_sensitive]
+        column = [options[:attributes][0].to_s]
+        if options[:scope]
+          if options[:scope].is_a?(Array)
+            column += options[:scope].map(&:to_s)
+          elsif options[:scope].is_a?(Symbol)
+            column << options[:scope].to_s
+          else
+            puts "got scope that was not symbol or array"
+          end
+        end
+        c = UniqueConstraint.new(options[:class].to_s, column, cs)
+
       end
 
       def validate_each(record, attribute, value)

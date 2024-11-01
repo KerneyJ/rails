@@ -1,8 +1,13 @@
 # frozen_string_literal: true
+require 'pp'
 
 module ActiveRecord
   module Validations
     class AbsenceValidator < ActiveModel::Validations::AbsenceValidator # :nodoc:
+      def initialization(options) # not used in diaspora 
+        super
+      end
+
       def validate_each(record, attribute, association_or_value)
         if record.class._reflect_on_association(attribute)
           association_or_value = Array.wrap(association_or_value).reject(&:marked_for_destruction?)
