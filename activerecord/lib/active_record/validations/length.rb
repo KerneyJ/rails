@@ -16,8 +16,9 @@ module ActiveRecord
           min = options[:minimum]
         end
 
+        file = File.open("/home/ubuntu/dse/policy-extraction-scripts/constraints_extactor/constraints", "a")
         c = LengthConstraint.new(options[:class].to_s, options[:attributes][0].to_s, min, max)
-        # puts c
+        file.puts c
 
         super
       end

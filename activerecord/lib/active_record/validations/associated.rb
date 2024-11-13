@@ -8,13 +8,16 @@ module ActiveRecord
       def initialize(options)
         # Table => klass
         # Column => klass.primary_key
-        # Fk_Table => 
-        # Fk_Column =>
+        # Fk_Table => options[:attributes].first
+        # Fk_Column => (can assume its id, for now)
         klass = options[:class] # table is class, column is primary key
-        fk = options[:attributes] # table is attribute, need primary key of this attribute
-        pp klass
+        fk = options[:attributes].first # table is attribute, need primary key of this attribute
         # see if fk is an argument in klass.new, if so, get that class and its foreign key
         # pp klass.instance_method(:initialize).parameters
+        # pp fk.first
+        file = File.open("/home/ubuntu/dse/policy-extraction-scripts/constraints_extactor/constraints", "a")
+        c = ForeignKeyConstraint.new(klass.to_s, "id", fk.to_s, "id")
+        file.puts c
         super
       end
 

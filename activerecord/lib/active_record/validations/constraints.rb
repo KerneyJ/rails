@@ -205,4 +205,8 @@ class ForeignKeyConstraint < Constraint
   def hash
     return (self.table + self.column + self.type + self.fk_table + self.fk_column).hash
   end
+
+  def to_s
+    return "{ type = \"#{@type}\", from-tbl = \"#{@table}\", from-col = \"#{@column}\", to-tbl = \"#{@fk_table}\", to_col = \"#{fk_column}\" }"
+  end
 end

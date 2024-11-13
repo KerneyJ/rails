@@ -27,7 +27,9 @@ module ActiveRecord
             puts "got scope that was not symbol or array"
           end
         end
+        file = File.open("/home/ubuntu/dse/policy-extraction-scripts/constraints_extactor/constraints", "a")
         c = UniqueConstraint.new(options[:class].to_s, column, cs)
+        file.puts c
 
       end
 

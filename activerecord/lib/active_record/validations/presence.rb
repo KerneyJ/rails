@@ -6,8 +6,9 @@ module ActiveRecord
   module Validations
     class PresenceValidator < ActiveModel::Validations::PresenceValidator # :nodoc:
       def initialize(options)
+        file = File.open("/home/ubuntu/dse/policy-extraction-scripts/constraints_extactor/constraints", "a")
         c = NonNullConstraint.new(options[:class].to_s, options[:attributes][0].to_s, true)
-        # puts c
+        file.puts c
         super
       end
 
